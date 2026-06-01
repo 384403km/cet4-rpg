@@ -6,10 +6,11 @@
 <title>地月专属 · 领域四级词库</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Serif+SC:wght@400;700;900&family=Special+Elite&family=Orbitron:wght@400;700;900&family=Major+Mono+Display&family=Fira+Code:wght@400;700&family=Yuji+Syuku&display=swap" rel="stylesheet">
+<script src="data.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;background:#0a0a0f;font-family:'Noto Serif SC',serif;overflow-x:hidden;color:#e0dcd0;-webkit-font-smoothing:antialiased}
-:root{--bg:#0a0a0f;--surface:#14141e;--surface2:#1c1c2a;--text:#e0dcd0;--text2:#908a78;--df-red:#c62828;--df-gold:#b8860b;--fgo-gold:#d4a017;--fgo-blue:#1a237e;--dev-green:#00ff41;--dev-bg:#0d1117;--mys-purple:#7b2d8e;--mys-accent:#bb86fc}
+:root{--bg:#0a0a0f;--surface:#14141e;--surface2:#1c1c2a;--text:#e0dcd0;--text2:#908a78;--df-red:#c62828;--fgo-gold:#d4a017;--fgo-blue:#1a237e;--dev-green:#00ff41;--mys-purple:#7b2d8e;--mys-accent:#bb86fc}
 #load{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;transition:opacity .6s}
 #load.hide{opacity:0;pointer-events:none}
 .load-ring{width:64px;height:64px;border:3px solid #2a2a3e;border-top-color:var(--dev-green);border-radius:50%;animation:spin 1s linear infinite}
@@ -110,19 +111,8 @@ body{min-height:100vh;background:#0a0a0f;font-family:'Noto Serif SC',serif;overf
 .fgo-progress .fill{background:var(--fgo-gold)}
 .dev-progress .fill{background:var(--dev-green)}
 .mys-progress .fill{background:var(--mys-accent)}
-
-/* Mastery badge animation */
-.mastery-badge{position:absolute;top:-4px;right:-4px;font-size:.9rem;animation:pop .3s cubic-bezier(.68,-.55,.265,1.55)}
-@keyframes pop{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
-
-/* Toast message */
 .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 24px;font-size:.85rem;z-index:100;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.show{opacity:1}
-.toast.df-msg{border-color:var(--df-red);color:#ffaaaa}
-.toast.fgo-msg{border-color:var(--fgo-gold);color:#ffe082}
-.toast.dev-msg{border-color:var(--dev-green);color:#7affa0}
-.toast.mys-msg{border-color:var(--mys-accent);color:#d0a0ff}
-
 @media(max-width:600px){
   .deck-grid{grid-template-columns:1fr 1fr;gap:12px}
   .deck-card{min-height:160px;padding:20px 16px}
@@ -181,115 +171,207 @@ body{min-height:100vh;background:#0a0a0f;font-family:'Noto Serif SC',serif;overf
 <div class="toast" id="toast"></div>
 
 <script>
-const DECKS = {
-  darkfantasy:{
-    name:'黑暗幻想',icon:'🗡️',theme:'df',progressClass:'df-progress',filterAccent:'var(--df-red)',
-    desc:'血腥、献祭、裂缝中的低语——你笔下的世界',
-    words:[
-      ["ritual","n.","献祭仪式，一套带有目的性且通常血腥的固定行为","The cult performed its ritual under the eclipse, and the air thickened with copper."],
-      ["wound","n./v.","（深处的）伤口；施加创伤","The wound gaped like a second mouth, its edges already blackening."],
-      ["crawl","v.","（贴着地面）爬行，缓慢移动","He crawled across the blood-soaked flagstones, fingers leaving wet trails."],
-      ["blade","n.","剑刃，刀锋","The blade caught the torchlight—a streak of hunger in the dark."],
-      ["sacrifice","n./v.","献祭；牺牲品","Sacrifice was never a choice here. Only a matter of who bled first."],
-      ["shadow","n./v.","暗影；投下阴影","The shadows moved against the torchlight—or was it the other way around?"],
-      ["flesh","n.","（人或动物的）血肉，肉体","The flesh remembers every cut. The mind just learns to live with the memory."],
-      ["dread","n./v.","深入骨髓的恐惧","A cold dread settled in his chest, heavier than any blade."],
-      ["hollow","adj./v.","空洞的；（使）空虚","His eyes were hollow—not dead, just no longer home to anything human."],
-      ["fester","v.","（伤口）化脓溃烂；（怨恨）郁积","The wound festered in the damp, and with it, his hatred."],
-      ["decay","n./v.","腐朽，衰败","The castle smelled of decay—wet stone, rotting wood, something older."],
-      ["tremble","v.","（因恐惧/寒冷）颤抖","Her hands trembled, but her voice did not. That was how he knew she'd already won."],
-      ["abyss","n.","深渊；不可测的深处","He stared into the abyss long enough that it started staring back through his own eyes."],
-      ["curse","n./v.","诅咒；使受诅咒","The curse wasn't death—it was living forever, watching everyone else die."],
-      ["corpse","n.","尸体，死尸","The corpse sat upright in the chair, as if still waiting for the tea to cool."],
-      ["dagger","n.","短剑，匕首","She palmed the dagger—a habit born from years of trusting the wrong people."],
-      ["phantom","n.","幽灵，幻影；萦绕不去的东西","The phantom of her voice lingered in the hallway long after she'd gone."],
-      ["savage","adj./n./v.","野蛮的；残暴攻击","The savagery of the attack left nothing intact—not even the silence."],
-      ["agony","n.","（极度的）痛苦，折磨","His agony was written in the way every muscle screamed at once."],
-      ["brutal","adj.","残忍的，毫不留情的","The winter was brutal that year. It took the old, the weak, and the unlucky."],
-      ["casket","n.","棺材；小匣子","They lowered the casket into mud that didn't even try to hide its hunger."],
-      ["howl","n./v.","（因痛苦/愤怒）嚎叫","The howl came from somewhere deep in the forest—or from somewhere deep in him."],
-      ["lurk","v.","潜伏，隐藏等待","Something lurked beneath the still water. The ripples told the truth the surface hid."],
-      ["mortal","adj./n.","凡人的；会死的","The gods made one mistake: they forgot what mortals do when they have nothing left to lose."],
-      ["pierce","v.","刺穿，穿透","The arrow pierced his shoulder, pinning him to the oak like an offering."],
-      ["scar","n./v.","伤疤；留下精神创伤","The scar across his palm was a daily reminder that some bargains cost more than blood."],
-      ["stench","n.","恶臭，腐臭味","The stench of rot hit him before the sight did. He wished it hadn't."],
-      ["torment","n./v.","折磨，精神上的酷刑","The memories came back to torment him every night, punctual as a clockwork curse."],
-      ["vigil","n.","守夜，不眠的守望","She kept vigil over his body until dawn, hoping for a miracle that never came."],
-      ["whisper","n./v.","低语；秘密流传","The walls whispered in a language older than the stones they were made of."],
-      ["wrath","n.","（神的）愤怒，天谴","The wrath of something ancient descended upon them—not lightning, but silence."],
-      ["chasm","n.","（地面/信仰/关系的）深裂","Between what he said and what he meant lay a chasm no bridge could span."],
-      ["dusk","n.","黄昏，薄暮","Dusk was her favorite hour—when the boundary between worlds wore thin as paper."],
-      ["exile","n./v.","流放；自我放逐","Exile was his choice. Better banishment than watching what his home had become."],
-      ["gash","n./v.","（深的）切口，划伤","The gash across his ribs was deep enough to show bone. He kept walking."],
-      ["haunt","v./n.","（鬼魂/记忆）出没；常去的地方","The manor was haunted—not by ghosts, but by the weight of everything that had happened there."],
-      ["immortal","adj./n.","不朽的，长生不死的","Immortality wasn't a gift. It was a prison with no walls and no release."],
-      ["lament","v./n.","哀悼；悲叹","She lamented not his death, but the way he'd chosen to live."],
-      ["menace","n./v.","威胁；具有危险性的人/物","There was a menace in his stillness—a predator's patience."],
-      ["omen","n.","预兆，征兆","The raven at the window was an omen. The question was: of what?"],
-      ["plague","n./v.","瘟疫；困扰","The plague swept through the village like a bored god cleaning house."],
-      ["shriek","n./v.","尖叫，刺耳的声音","The shriek tore through the night—half human, half something that had forgotten how to be."],
-      ["sorrow","n.","悲伤，哀愁","Her sorrow had weight. You could feel it in the room like a piece of furniture no one would sit on."],
-      ["throne","n.","王座；权力的象征","The throne was empty. That was the scariest part."],
-      ["vile","adj.","邪恶的；令人作呕的","He did vile things—not because he enjoyed them, but because the voice told him to."],
-      ["anguish","n.","身心上的剧痛，苦闷","Anguish twisted her face into something her own mother wouldn't recognize."],
-      ["coffin","n.","棺材","They nailed the coffin shut, but they couldn't nail the silence."],
-      ["damned","adj./v.","该下地狱的；被诅咒的","The damned souls didn't scream—they just stared, and that was worse."],
-      ["ember","n.","余烬，未熄的火","The embers glowed like the last heartbeat of a dying world."],
-      ["frenzy","n.","狂暴，疯狂","In his frenzy, he couldn't tell friend from foe. Everyone was just meat."],
-      ["hatred","n.","刻骨的仇恨","Hatred was a language she spoke fluently. Love was the foreign tongue."],
-      ["lair","n.","（野兽的）巢穴，躲藏处","The beast's lair was littered with bones—each one a story that ended too soon."],
-      ["noose","n.","绞索，套索","The noose swung gently in the wind—patient, as if it had all the time in the world."],
-      ["rot","v./n.","腐烂，腐朽","The rot started at the foundation. By the time they noticed, the whole building was unsound."],
-      ["slaughter","n./v.","屠杀；大范围杀戮","The slaughter lasted three hours. The clean-up took three days."],
-      ["tomb","n.","坟墓，陵墓","The tomb wasn't sealed to keep people out. It was sealed to keep something in."],
-      ["vengeance","n.","复仇，报复","Vengeance was a dish he'd waited thirty years to serve cold."],
-      ["yearn","v.","渴望，强烈思念","She yearned for a peace she'd never known, in a world that didn't know how to give it."],
-      ["desolate","adj.","荒凉的；孤独凄凉的","The desolate landscape stretched for miles—a monument to something that had been beautiful once."],
-      ["famine","n.","饥荒；极度匮乏","The famine was in its third year. People had stopped burying their dead."],
-      ["grieve","v.","哀悼，悲痛","She grieved not for the man he was, but for the man she thought she knew."],
-      ["heretic","n.","异端分子，离经叛道者","They burned the heretic at dawn. His last words were a joke no one understood."],
-      ["infernal","adj.","地狱的；恶魔般的","The infernal heat rose from the cracks in the earth like the breath of something below."],
-      ["misery","n.","痛苦，悲惨的处境","Misery was a shared language in the prison—spoken without words."],
-      ["oath","n.","誓言，庄严的承诺","He broke his oath, but kept his word. There's a difference, and it cost him everything."],
-      ["perish","v.","消亡；惨死","Perish the thought—but the thought came anyway, armed and hungry."],
-      ["ravage","v./n.","蹂躏，严重破坏","War ravaged the land until even the crows had nothing left to pick at."],
-      ["slay","v.","杀死（尤指暴力/英雄式地）","He slew the dragon not because it was evil, but because that was the job."],
-      ["usurp","v.","篡夺（权力/地位）","The younger brother usurped the throne while the king was still breathing his last."],
-      ["beast","n.","野兽；（人内的）兽性","The beast inside him was caged, but the bars were rusting."],
-      ["captive","n./adj.","俘虏；被囚禁的","The captive said nothing. Not because he was brave, but because he had nothing left to say."],
-      ["cleave","v.","劈开；（对人）依恋","The axe cleaved the skull cleanly. The second swing was out of mercy."],
-      ["corrode","v.","腐蚀，侵蚀","The acid rain corroded the stone saints until they looked like weeping sinners."],
-      ["entrails","n.","内脏，肠","The entrails spilled onto the altar floor, and the priest nodded as if he'd expected this."],
-      ["lacerate","v.","划伤，撕裂（皮肤/组织）","The thorns lacerated his arms as he forced his way through the thicket."],
-      ["mutilate","v.","严重毁伤（肢体）","The corpse was mutilated beyond recognition. That was the point."],
-      ["ponder","v.","沉思，仔细考虑","He pondered the nature of evil until evil got bored and left."],
-      ["quiver","n./v.","箭袋；微微颤抖","The arrow quivered in the wood, still humming with the bow's release."],
-      ["sterile","adj.","无菌的；贫瘠的；无生气的","The land was sterile. Nothing grew, nothing died, nothing changed."],
-      ["tangle","n./v.","纠缠的乱团；缠住","Her hair was a tangle of knots—like the plot she couldn't untangle in her head."],
-      ["unspeakable","adj.","无法言说的（多指恐怖之事）","He witnessed unspeakable things in the dungeon—things that language refused to describe."],
-      ["vault","n./v.","拱顶；跳跃","The vaulted ceiling crumbled, raining centuries of dust upon the altar."],
-      ["withered","adj./v.","枯萎的；衰败凋零","The old man's withered hand still held the sword—even in death, a warrior."],
-      ["wreak","v.","造成（损害/报复）","He vowed to wreak havoc upon those who had wronged him."],
-      ["yearning","n./adj.","强烈的渴望","A yearning for home consumed her—though she knew home no longer existed."],
-      ["zealot","n.","狂热信徒，极端分子","The zealot's eyes burned with a fire that had nothing to do with sanity."]
-    ]
-  },
-  fgo:{
-    name:'Fate/Grand Order',icon:'⚔️',theme:'fgo',progressClass:'fgo-progress',filterAccent:'var(--fgo-gold)',
-    desc:'召唤、羁绊、宝具——迦勒底生存用语',
-    words:[
-      ["summon","v.","召唤（从者）","The summoning circle flared, and a new name was etched into Chaldea's records."],
-      ["defeat","v./n.","击破，打败","Defeat the beast before it sings its third verse. You have seven turns."],
-      ["bond","n.","羁绊，契约的纽带","Bond level ten—when a servant stays not because of command spells, but because they want to."],
-      ["command","n./v.","指令；命令。灵子转移中的权限标识","Command seal expended. One stroke left between you and certain death."],
-      ["noble","adj./n.","高贵的；Noble Phantasm 宝具","Her Noble Phantasm unfolded—a garden of light that erased everything it touched."],
-      ["craft","n./v.","概念礼装 Craft Essence；精心制作","Limited CE. You spent 300 quartz for it. Worth every pull."],
-      ["essence","n.","本质，精髓。礼装（CE=Concept Essence）","The essence of a servant is not their stats, but the story they carry."],
-      ["ascent","n.","再临 Ascension；上升过程","Final ascent required—mats, QP, and that one gold gem that never drops."],
-      ["phantasm","n.","幻想；Phantasm（宝具后缀）","A phantasm given form—the crystallized legend of a hero who never truly existed."],
-      ["vow","n./v.","誓言，立约","The vow between master and servant outlasts the Grail itself."],
-      ["fortune","n.","命运，运气；也指抽卡的结果","Gacha fortune: you either get spooked or scream at rainbow orbs."],
-      ["pray","v.","祈祷；在卡池前的条件反射","I prayed before pulling. It didn't work. It never works."],
-      ["ancient","adj.","古老的；远古时期的","The ancient temple predated the Age of Man. The servants inside predated history."],
-      ["banner","n.","旗帜；卡池横幅","Limited banner ending in 48 hours. Your quartz stash is sweating."],
-      ["crystal","n./adj.","结晶；水晶般的","Saint Quartz: the
+const DECKS = VOCAB_DATA;
+let currentDeck = null, currentFilter = 'all', quizQueue = [], quizIdx = 0, quizCorrect = 0;
+const MK = 'cet4_domain_mastery';
+
+function getM(){try{return JSON.parse(localStorage.getItem(MK)||'{}')}catch(e){return{}}}
+function setM(m){localStorage.setItem(MK,JSON.stringify(m))}
+function fs(word,deck){const k=deck+':'+word;const m=getM();return {seen:!!m[k],mastered:m[k]==='m'}}
+
+function showToast(msg,cls){
+  const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+cls+' show';
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+function init(){
+  const grid=document.getElementById('deckGrid');grid.innerHTML='';
+  Object.entries(DECKS).forEach(([k,v])=>{
+    const card=document.createElement('div');
+    card.className=`deck-card ${k}-theme`;
+    card.onclick=()=>openDeck(k);
+    card.innerHTML=`<div class="icon">${v.icon}</div><h2>${v.name}</h2><p>${v.desc}</p><span class="count">${v.words.length} 词</span>`;
+    grid.appendChild(card);
+  });
+  setTimeout(()=>document.getElementById('load').classList.add('hide'),600);
+}
+
+function openDeck(deckKey){
+  currentDeck = deckKey;
+  document.getElementById('landing').style.display='none';
+  document.getElementById('game').classList.add('active');
+  document.getElementById('quiz').classList.remove('active');
+  currentFilter='all';
+  document.querySelectorAll('#filterBar .tag').forEach(t=>t.classList.toggle('active',t.dataset.filter==='all'));
+  renderCards();
+}
+
+function backToLanding(){
+  document.getElementById('game').classList.remove('active');
+  document.getElementById('quiz').classList.remove('active');
+  document.getElementById('landing').style.display='flex';
+}
+
+function renderCards(){
+  const d = DECKS[currentDeck];
+  const grid = document.getElementById('cardGrid');
+  const cardElements = [];
+  let seen=0,mastered=0;
+  d.words.forEach(w=>{
+    const f = fs(w.w,currentDeck);
+    if(f.mastered)mastered++;
+    if(f.seen)seen++;
+    const pass = currentFilter==='all'||(currentFilter==='new'&&!f.seen)||(currentFilter==='seen'&&f.seen&&!f.mastered)||(currentFilter==='mastered'&&f.mastered);
+    if(!pass)return;
+    cardElements.push({word:w,flipped:f.seen});
+  });
+  grid.innerHTML='';
+  cardElements.forEach(({word:w,flipped:fl})=>{
+    const card=document.createElement('div');
+    card.className=`card-wrap ${d.theme}-card${fl?' flipped':''}`;
+    card.dataset.word=w.w;
+    card.innerHTML=`<div class="card-inner" onclick="toggleCard(this,'${w.w}')">
+      <div class="card-front"><div class="word">${w.w}</div><div class="pos">${w.p}</div></div>
+      <div class="card-back"><span class="themed-tag">${d.name}</span><div class="def">${w.d}</div><div class="ex">"${w.e}"</div></div>
+    </div>`;
+    grid.appendChild(card);
+  });
+  document.getElementById('seenCount').textContent='👁️ '+seen;
+  document.getElementById('masteredCount').textContent='⭐ '+mastered;
+  document.getElementById('gameSubtitle').textContent=`已掌握 ${mastered}/${d.words.length}`;
+  const pct = d.words.length?Math.round(mastered/d.words.length*100):0;
+  document.getElementById('progressBar').className=`progress-bar ${d.progressClass}`;
+  document.getElementById('progressFill').style.width=pct+'%';
+}
+
+function toggleCard(el,word){
+  const wrap=el.closest('.card-wrap');
+  if(wrap.classList.contains('flipped'))return;
+  wrap.classList.add('flipped');
+  const m=getM();
+  m[currentDeck+':'+word]='s';
+  setM(m);
+  renderCards();
+  // ask mastery after short delay
+  setTimeout(()=>{
+    if(confirm(`掌握 "${word}" 了吗？\n「确定」→ ⭐掌握  「取消」→ 仅已阅`)){
+      const m2=getM();
+      m2[currentDeck+':'+word]='m';
+      setM(m2);
+      const d=DECKS[currentDeck];
+      const w=d.words.find(x=>x.w===word);
+      const msgs=['Nice!','记住了～','稳的','可以的','好词','有种！'];
+      showToast('⭐ '+word+' — '+msgs[Math.floor(Math.random()*msgs.length)],d.theme+'-msg');
+      renderCards();
+    }
+  },600);
+}
+
+function setFilter(el,f){
+  currentFilter=f;
+  document.querySelectorAll('#filterBar .tag').forEach(t=>t.classList.toggle('active',t.dataset.filter===f));
+  renderCards();
+}
+
+function shuffleCards(){
+  const grid=document.getElementById('cardGrid');
+  const cards=[...grid.children];
+  for(let i=cards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));grid.appendChild(cards[j]);}
+}
+
+function flipAll(){
+  document.querySelectorAll('.card-wrap:not(.flipped)').forEach(w=>{
+    w.classList.add('flipped');
+    const m=getM();
+    if(!m[currentDeck+':'+w.dataset.word]){m[currentDeck+':'+w.dataset.word]='s';setM(m);}
+  });
+  setTimeout(renderCards,600);
+}
+
+function resetDeck(){
+  if(!confirm(`重置 "${DECKS[currentDeck].name}" 的全部进度？`))return;
+  const m=getM();
+  Object.keys(m).forEach(k=>{if(k.startsWith(currentDeck+':'))delete m[k]});
+  setM(m);
+  renderCards();
+}
+
+function startQuiz(){
+  const d=DECKS[currentDeck];
+  const m=getM();
+  const pool=d.words.filter(w=>m[currentDeck+':'+w.w]==='m');
+  if(pool.length<4){alert(`至少需要掌握 4 个词才能测试～当前掌握了 ${pool.length} 个`);return;}
+  const shuffled=[...pool].sort(()=>Math.random()-.5);
+  quizQueue=shuffled.slice(0,Math.min(10,shuffled.length));
+  quizIdx=0;quizCorrect=0;
+  document.getElementById('game').classList.remove('active');
+  document.getElementById('quiz').classList.add('active');
+  showQuizQ();
+}
+
+function exitQuiz(){
+  document.getElementById('quiz').classList.remove('active');
+  document.getElementById('game').classList.add('active');
+  renderCards();
+}
+
+function showQuizQ(){
+  const item=quizQueue[quizIdx];
+  if(!item){finishQuiz();return;}
+  document.getElementById('qWord').textContent=item.w;
+  document.getElementById('qPos').textContent=item.p;
+  document.getElementById('quizScore').textContent=quizCorrect+'/'+quizQueue.length;
+  const d=DECKS[currentDeck];
+  let opts=[item.d];
+  const others=d.words.filter(x=>x.w!==item.w).sort(()=>Math.random()-.5);
+  for(let i=0;i<3&&i<others.length;i++)opts.push(others[i].d);
+  opts=opts.sort(()=>Math.random()-.5);
+  const c=document.getElementById('quizOptions');c.innerHTML='';
+  opts.forEach(def=>{
+    const btn=document.createElement('button');
+    btn.textContent=def;
+    btn.onclick=()=>{a(btn,def===item.d)};
+    c.appendChild(btn);
+  });
+  document.getElementById('quizResult').textContent='';
+  document.getElementById('quizNext').style.display='none';
+}
+
+function a(btn,correct){
+  document.querySelectorAll('#quizOptions button').forEach(b=>b.onclick=null);
+  const d=DECKS[currentDeck];
+  if(correct){
+    btn.classList.add('correct');quizCorrect++;
+    document.getElementById('quizResult').innerHTML='✅ 正确！';document.getElementById('quizResult').style.color='var(--dev-green)';
+  } else {
+    btn.classList.add('wrong');
+    const correctDef=d.words.find(w=>w.w===quizQueue[quizIdx].w).d;
+    document.querySelectorAll('#quizOptions button').forEach(b=>{if(b.textContent===correctDef)b.classList.add('correct')});
+    document.getElementById('quizResult').innerHTML='❌ 再想想～正确释义已标绿';document.getElementById('quizResult').style.color='var(--df-red)';
+  }
+  document.getElementById('quizScore').textContent=quizCorrect+'/'+quizQueue.length;
+  document.getElementById('quizNext').style.display='inline-block';
+}
+
+function nextQuiz(){
+  quizIdx++;
+  if(quizIdx>=quizQueue.length){finishQuiz();return;}
+  showQuizQ();
+}
+
+function finishQuiz(){
+  const total=quizQueue.length,pct=Math.round(quizCorrect/total*100);
+  const msg=pct>=80?'🎉 太棒了！':pct>=60?'👍 还不错～':'💪 继续加油！';
+  document.getElementById('qWord').textContent=msg;
+  document.getElementById('qPos').textContent='';
+  document.getElementById('quizOptions').innerHTML='';
+  document.getElementById('quizResult').innerHTML=`<div style="font-size:1.5rem;margin:16px 0">${quizCorrect}/${total} (${pct}%)</div><div style="color:var(--text2);font-size:.9rem">正确率 ${pct}%</div>`;
+  document.getElementById('quizNext').textContent='🔙 返回词库';
+  document.getElementById('quizNext').onclick=exitQuiz;
+  document.getElementById('quizNext').style.display='inline-block';
+}
+
+init();
+</script>
+</body>
+</html>
