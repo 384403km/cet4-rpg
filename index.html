@@ -10,7 +10,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;background:#0a0a0f;font-family:'Noto Serif SC',serif;overflow-x:hidden;color:#e0dcd0;-webkit-font-smoothing:antialiased}
-:root{--bg:#0a0a0f;--surface:#14141e;--surface2:#1c1c2a;--text:#e0dcd0;--text2:#908a78;--df-red:#c62828;--fgo-gold:#d4a017;--fgo-blue:#1a237e;--dev-green:#00ff41;--mys-purple:#7b2d8e;--mys-accent:#bb86fc}
+:root{--bg:#0a0a0f;--surface:#14141e;--surface2:#1c1c2a;--text:#e0dcd0;--text2:#908a78;--df-red:#c62828;--fgo-gold:#d4a017;--fgo-blue:#1a237e;--dev-green:#00ff41;--mys-purple:#7b2d8e;--mys-accent:#bb86fc;--gl-pink:#ff6b9d;--gl-blue:#89cff0;--gl-accent:#ff4081;--bio-green:#4caf50;--bio-teal:#009688;--bio-accent:#a5d6a7}
 #load{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;transition:opacity .6s}
 #load.hide{opacity:0;pointer-events:none}
 .load-ring{width:64px;height:64px;border:3px solid #2a2a3e;border-top-color:var(--dev-green);border-radius:50%;animation:spin 1s linear infinite}
@@ -37,7 +37,7 @@ body{min-height:100vh;background:#0a0a0f;font-family:'Noto Serif SC',serif;overf
 .dev-theme .icon{color:var(--dev-green)}
 .mys-theme{background:linear-gradient(145deg,#120824,#080412);border-color:#2a1a3a}
 .mys-theme:hover{border-color:var(--mys-purple);box-shadow:0 12px 40px rgba(123,45,142,.25)}
-.mys-theme .icon{color:var(--mys-accent)}
+.mys-theme .icon{color:var(--mys-accent)}.gl-theme{background:linear-gradient(145deg,#1a0a14,#0f050d);border-color:#3a1520}.gl-theme:hover{border-color:var(--gl-pink);box-shadow:0 12px 40px rgba(255,107,157,.2)}.gl-theme .icon{color:var(--gl-pink)}.bio-theme{background:linear-gradient(145deg,#0a1a0f,#05100a);border-color:#153520}.bio-theme:hover{border-color:var(--bio-green);box-shadow:0 12px 40px rgba(76,175,80,.2)}.bio-theme .icon{color:var(--bio-green)}
 #game{display:none;min-height:100vh;padding:20px}
 #game.active{display:block}
 .game-header{display:flex;align-items:center;gap:16px;padding:16px 0;max-width:1080px;margin:0 auto 24px;border-bottom:1px solid rgba(255,255,255,.06);flex-wrap:wrap}
@@ -77,7 +77,7 @@ body{min-height:100vh;background:#0a0a0f;font-family:'Noto Serif SC',serif;overf
 .mys-card .card-front{background:linear-gradient(180deg,#120824,#0a0418);border-color:#2a1a3a}
 .mys-card .card-back{background:linear-gradient(180deg,#140a28,#0c051e);border-color:#3a2a4a}
 .mys-card .card-back .def{color:#d0a0ff}
-.mys-card .themed-tag{background:rgba(123,45,142,.3);color:var(--mys-accent)}
+.mys-card .themed-tag{background:rgba(123,45,142,.3);color:var(--mys-accent)}.gl-card .card-front{background:linear-gradient(180deg,#1a0a14,#120812);border-color:#3a1520}.gl-card .card-back{background:linear-gradient(180deg,#1c0c16,#140a12);border-color:#4a2030}.gl-card .card-back .def{color:#ffb0c8}.gl-card .themed-tag{background:rgba(255,107,157,.2);color:var(--gl-pink)}.bio-card .card-front{background:linear-gradient(180deg,#0a1a0f,#07120a);border-color:#153520}.bio-card .card-back{background:linear-gradient(180deg,#0c1c11,#08140c);border-color:#254530}.bio-card .card-back .def{color:#a5d6a7}.bio-card .themed-tag{background:rgba(76,175,80,.2);color:var(--bio-green)}
 #quiz{display:none;min-height:100vh;padding:20px}
 #quiz.active{display:block}
 .quiz-box{max-width:640px;margin:80px auto;background:var(--surface);border-radius:20px;padding:48px 32px;text-align:center;border:1px solid rgba(255,255,255,.06)}
@@ -110,7 +110,7 @@ body{min-height:100vh;background:#0a0a0f;font-family:'Noto Serif SC',serif;overf
 .df-progress .fill{background:var(--df-red)}
 .fgo-progress .fill{background:var(--fgo-gold)}
 .dev-progress .fill{background:var(--dev-green)}
-.mys-progress .fill{background:var(--mys-accent)}
+.mys-progress .fill{background:var(--mys-accent)}.gl-progress .fill{background:var(--gl-pink)}.bio-progress .fill{background:var(--bio-green)}
 .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 24px;font-size:.85rem;z-index:100;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.show{opacity:1}
 @media(max-width:600px){
@@ -128,7 +128,11 @@ body{min-height:100vh;background:#0a0a0f;font-family:'Noto Serif SC',serif;overf
 
 <section id="landing">
   <div class="title">🗂️ 地月专属 · 领域词库 <span>四级词汇嵌入你的世界 · <span class="em">word</span> 即记忆</span></div>
-  <div class="deck-grid" id="deckGrid"></div>
+  <div class="deck-grid" id="deckGrid">
+    
+      <h2>生物实验 · 医学</h2>
+      <p>显微镜、解剖针、培养皿——实验台上的真相</p>
+    </div></div>
 </section>
 
 <section id="game">
@@ -156,7 +160,7 @@ body{min-height:100vh;background:#0a0a0f;font-family:'Noto Serif SC',serif;overf
 <section id="quiz">
   <div class="quiz-header">
     <button class="back" onclick="exitQuiz()">←</button>
-    <h1>🎯 测试</h1>
+    <h1>🎯 语境选义</h1>
     <span class="score" id="quizScore">0/0</span>
   </div>
   <div class="quiz-box" id="quizBox">
